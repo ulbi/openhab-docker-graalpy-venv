@@ -72,5 +72,5 @@ COPY --chown=9001:9001 --from=venv-builder /openhab/python /openhab/python
 COPY --chown=9001:9001 requirements.txt /openhab/requirements.txt
 
 RUN mkdir -p /etc/cont-init.d
-COPY /cont-init.d/* /etc/cont-init.d/
+COPY cont-init.d/* /etc/cont-init.d/
 RUN chmod +x /etc/cont-init.d/*

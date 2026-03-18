@@ -33,6 +33,16 @@ docker build --build-arg BASE_IMAGE=openhab/openhab:5.1.3-debian -t openhab-graa
 ```
 The GraalPy version is detected automatically from the addons KAR of the chosen openHAB version — no manual version pinning needed.
 
+## GitHub Actions / Published images
+
+The workflow `.github/workflows/build-image.yml` runs every Sunday at 3am and can also be triggered manually via `workflow_dispatch`. It:
+
+1. Fetches the 10 most recent `*-debian` tags from Docker Hub (`openhab/openhab`)
+2. Builds each tag in a matrix job using `BASE_IMAGE=openhab/openhab:<tag>`
+3. Pushes to GHCR as `ghcr.io/<owner>/openhab-docker-graalpy-venv:<tag>` and updates `:latest`
+
+The GraalPy version is auto-detected per build from the addons KAR — no manual pinning needed when openHAB updates.
+
 ## Automated GraalPy venv smoke test
 
 `./run-test.sh` builds the enhanced OpenHAB image, mounts the `test-config` python rules/items, waits for the REST API, and then runs `tests/check_venv.py` on the host to confirm that `SimpleItem` was updated and the `requests`-powered rule reported HTTP `200`. The script tears down the compose stack afterward and prints a concise pass/fail message.

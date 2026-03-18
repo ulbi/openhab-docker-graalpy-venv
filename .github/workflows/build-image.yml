@@ -14,9 +14,10 @@ jobs:
       - name: Fetch openHAB debian tags
         id: get-tags
         run: |
-          # openHAB Docker Hub images mit "debian" im Tag
+          # openHAB Docker Hub images mit "debian" im Tag und extrahierbarer Versionsnummer
           TAGS=$(curl -s 'https://registry.hub.docker.com/v2/repositories/openhab/openhab/tags?page_size=100' \
             | jq -r '.results[] | select(.name | contains("debian")) | .name' \
+            | grep -E '[0-9]+\.[0-9]+\.[0-9]+' \
             | sort -V | tail -10 | jq -R . | jq -sc .)
 
           echo "tags=$TAGS" >> $GITHUB_OUTPUT
